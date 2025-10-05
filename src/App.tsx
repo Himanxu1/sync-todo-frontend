@@ -4,6 +4,8 @@ import TodoInput from "./components/TodoInput";
 import Todolist from "./components/Todolist";
 import { getTasks } from "./utils/localdb";
 import { syncWithServer } from "./utils/sync";
+import { Analytics } from "@vercel/analytics/next"
+
 
 function App() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -28,6 +30,7 @@ function App() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
+      <Analytics />
       <div className="container mx-auto px-4 py-8 max-w-4xl">
         {/* Header */}
         <div className="text-center mb-12 animate-fade-in">
