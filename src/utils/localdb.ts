@@ -1,0 +1,50 @@
+import { openDB } from "idb";
+
+const DB_NAME = "offlineDB";
+const STORE_NAME = "tasks";
+
+export const initDB = async () => {
+  return openDB(DB_NAME, 1, {
+    upgrade(db) {
+      if (!db.objectStoreNames.contains(STORE_NAME)) {
+        db.createObjectStore(STORE_NAME, {
+          keyPath: "id",
+          autoIncrement: true,
+        });
+      }
+    },
+  });
+};
+
+export const addTask = async (task: { title: string; completed: boolean }) => {
+  const db = await initDB();
+  await db.add(STORE_NAME, task);
+};
+
+export const getTasks = async () => {
+  const db = await initDB();
+  return await db.getAll(STORE_NAME);
+};
+
+export const deleteTask = async (id: number) => {
+  const db = await initDB();
+  return await db.delete(STORE_NAME, id);
+};
+
+export const updateTask = async (task: {
+  id: string;
+  title: string;
+  completed: boolean;
+}) => {
+  const db = await initDB();
+  return await db.put(STORE_NAME, task);
+};
+
+export const markAsSynced = async (id: number) => {
+  const db = await initDB();
+  const task = await db.get(STORE_NAME, id);
+  if (task) {
+    task.synced = true;
+    await db.put(STORE_NAME, task);
+  }
+};
