@@ -6,7 +6,12 @@ import App from "./App.tsx";
 import { Analytics } from "@vercel/analytics/next";
 
 if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("/sw.js").catch(console.error);
+  window.addEventListener("load", () => {
+    navigator.serviceWorker
+      .register("/sw.js")
+      .then((reg) => console.log("Service Worker registered:", reg))
+      .catch((err) => console.error("SW registration failed:", err));
+  });
 }
 
 createRoot(document.getElementById("root")!).render(
